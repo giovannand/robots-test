@@ -1,17 +1,19 @@
 <?php
-
 require 'vendor/autoload.php';
 
-
 use Telegram\Bot\Api;
+use Telegram\Bot\Objects\Update;
 
-use Telegram\Bot\Keyboard\Keyboard;
-
-use Telegram\Bot\Helpers\Emojify;
-
-use Telegram\Bot\FileUpload\InputFile;
-
-
-$dotenv = new Dotenv\Dotenv(__DIR__);
-
-$dotenv->load();
+if(file_exists('.env')) {
+    $dotenv = new Dotenv\Dotenv(__DIR__);
+    $dotenv->load();
+    class mockApi extends Api{
+        public function getWebhookUpdates($emitUpdateWasReceivedEvent = true) {
+            return new Update(json_decode(getenv('MOCK_JSON'), true));
+        }
+    }
+    $telegram = new mockApi();
+} else {
+    error_log(file_get_contents('php://input'));
+    $telegram = new Api();
+}
