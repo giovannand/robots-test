@@ -1,2 +1,9 @@
-composer.lock
-/vendor
+# .evn
+.env
+
+# composer dir and files
+vendor
+composer.phar
+
+# VI
+*.swp
